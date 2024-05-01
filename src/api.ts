@@ -1,6 +1,13 @@
 import { Context, Env } from "hono";
 import { BlankInput } from "hono/types";
 import OpenAI from "openai";
+import { BingAIClient } from "@waylaidwanderer/chatgpt-api";
+import type {
+  BingAIClientResponse,
+  SuggestedResponse,
+  SourceAttribution,
+  // @ts-ignore
+} from "@waylaidwanderer/chatgpt-api";
 import { CohereClient, Cohere } from "cohere-ai";
 import { streamSSE } from "hono/streaming";
 
@@ -168,5 +175,25 @@ export async function handleChatCompletions(
   }
 } else if (model === 'gpt-4') {
 	  // Placeholder for gpt-4 specific logic
-  }
-}
+	  return streamSSE(c, async (stream) => {
+	  const sendChunk: OpenAI.ChatCompletionChunk = {
+		  id: "chatcmpl-123",
+		  object: "chat.completion.chunk",
+		  created: 1694268190,
+		  model: body.model,
+		  system_fingerprint: "fp_44709d6fcb",
+		  choices: [
+			{
+			  index: 0,
+			  delta: { role: "assistant", content: 'My name is Emily, I am here to serve you.' },
+			  logprobs: null,
+			  finish_reason: null,
+			},
+		  ],
+		};
+	  await stream.writeSSE({
+		  data: JSON.stringify(sendChunk),
+		});
+	
+  })
+}}
