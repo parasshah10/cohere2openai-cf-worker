@@ -175,7 +175,23 @@ export async function handleChatCompletions(
   }
 } else if (model === 'gpt-4') {
 	  // Placeholder for gpt-4 specific logic
-	  
+	  const options = {
+			// userToken:'1Nu2b31jnH4RmhF_N0MoyGXKY-HsrARnfkpfN-ooX3HqgGEWpHZ7Ye12EHucFHltxby0uNuxVu9UrgcTXb1eidaXgNXXHtAzCJwe0ynpsGtK3Rxw8V7QYHRLUNkdBTBaAAQW0iY6RfXcTsZql2T6PvIAaO_ixOkq3eovhDW1LpKNIcX2kNpBvJOV3MmtLYKlSttBswDgVrOUHzmOrRelSZA',
+			userToken:'1Nu2b31jnH4RmhF_N0MoyGXKY-HsrARnfkpfN-ooX3HqgGEWpHZ7Ye12EHucFHltxby0uNuxVu9UrgcTXb1eidaXgNXXHtAzCJwe0ynpsGtK3Rxw8V7QYHRLUNkdBTBaAAQW0iY6RfXcTsZql2T6PvIAaO_ixOkq3eovhDW1LpKNIcX2kNpBvJOV3MmtLYKlSttBswDgVrOUHzmOrRelSZA',
+			debug: false,
+				host: null,
+				proxy: null}
+			// If the above doesn't work, provide all your cookies as a string instead};
+
+		let bingAIClient = new BingAIClient(options);
+
+		let response = await bingAIClient.sendMessage('Write a short poem about cats', {
+			// (Optional) Set a conversation style for this message (default: 'balanced')
+			toneStyle: 'precise', // or creative, precise, fast
+			onProgress: (token) => {
+				process.stdout.write(token);
+			},
+		})
 	  return streamSSE(c, async (stream) => {
 	  const sendChunk: OpenAI.ChatCompletionChunk = {
 		  id: "chatcmpl-123",
