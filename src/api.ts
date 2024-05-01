@@ -181,13 +181,13 @@ export async function handleChatCompletions(
 
 		let bingAIClient = new BingAIClient(options);
 
-		let response = await bingAIClient.sendMessage('Write a short poem about cats', {
-			// (Optional) Set a conversation style for this message (default: 'balanced')
-			toneStyle: 'precise', // or creative, precise, fast
-			// onProgress: (token) => {
-			// 	process.stdout.write(token);
-			// },
-		})
+		// let response = await bingAIClient.sendMessage('Write a short poem about cats', {
+		// 	// (Optional) Set a conversation style for this message (default: 'balanced')
+		// 	toneStyle: 'precise', // or creative, precise, fast
+		// 	// onProgress: (token) => {
+		// 	// 	process.stdout.write(token);
+		// 	// },
+		// })
 	  return streamSSE(c, async (stream) => {
 	  const sendChunk: OpenAI.ChatCompletionChunk = {
 		  id: "chatcmpl-123",
