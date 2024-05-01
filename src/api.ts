@@ -176,11 +176,7 @@ export async function handleChatCompletions(
 } else if (model === 'gpt-4') {
 	  // Placeholder for gpt-4 specific logic
 	  const options = {
-			// userToken:'1Nu2b31jnH4RmhF_N0MoyGXKY-HsrARnfkpfN-ooX3HqgGEWpHZ7Ye12EHucFHltxby0uNuxVu9UrgcTXb1eidaXgNXXHtAzCJwe0ynpsGtK3Rxw8V7QYHRLUNkdBTBaAAQW0iY6RfXcTsZql2T6PvIAaO_ixOkq3eovhDW1LpKNIcX2kNpBvJOV3MmtLYKlSttBswDgVrOUHzmOrRelSZA',
-			userToken:'1Nu2b31jnH4RmhF_N0MoyGXKY-HsrARnfkpfN-ooX3HqgGEWpHZ7Ye12EHucFHltxby0uNuxVu9UrgcTXb1eidaXgNXXHtAzCJwe0ynpsGtK3Rxw8V7QYHRLUNkdBTBaAAQW0iY6RfXcTsZql2T6PvIAaO_ixOkq3eovhDW1LpKNIcX2kNpBvJOV3MmtLYKlSttBswDgVrOUHzmOrRelSZA',
-			debug: false,
-				host: null,
-				proxy: null}
+			userToken:'1Nu2b31jnH4RmhF_N0MoyGXKY-HsrARnfkpfN-ooX3HqgGEWpHZ7Ye12EHucFHltxby0uNuxVu9UrgcTXb1eidaXgNXXHtAzCJwe0ynpsGtK3Rxw8V7QYHRLUNkdBTBaAAQW0iY6RfXcTsZql2T6PvIAaO_ixOkq3eovhDW1LpKNIcX2kNpBvJOV3MmtLYKlSttBswDgVrOUHzmOrRelSZA'}
 			// If the above doesn't work, provide all your cookies as a string instead};
 
 		let bingAIClient = new BingAIClient(options);
