@@ -62,7 +62,7 @@ export async function handleChatCompletions(
   // There will be *-internet, so check for that, and remove it
   const useInternet = body.model.includes("-internet");
   const model = body.model.replace("-internet", "");
-
+  if (["command", "command-nightly", "command-light", "command-light-nightly", "command-r", "command-r-plus"].includes(model)) {
   const apiRequestBody: CohereRequestBody = {
     message: "",
     model,
@@ -165,5 +165,8 @@ export async function handleChatCompletions(
     };
 
     return c.json(returnCompletionBody);
+  }
+} else if (model === 'gpt-4') {
+	  // Placeholder for gpt-4 specific logic
   }
 }
