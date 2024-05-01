@@ -179,7 +179,7 @@ export async function handleChatCompletions(
 		  choices: [
 			{
 			  index: 0,
-			  delta: { role: "assistant", 'My name is Emily' },
+			  delta: { role: "assistant", content: 'My name is Emily' },
 			  logprobs: null,
 			  finish_reason: null,
 			},
