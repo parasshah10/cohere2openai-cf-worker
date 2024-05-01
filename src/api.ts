@@ -2,12 +2,6 @@ import { Context, Env } from "hono";
 import { BlankInput } from "hono/types";
 import OpenAI from "openai";
 import { BingAIClient } from "@waylaidwanderer/chatgpt-api";
-import type {
-  BingAIClientResponse,
-  SuggestedResponse,
-  SourceAttribution,
-  // @ts-ignore
-} from "@waylaidwanderer/chatgpt-api";
 import { CohereClient, Cohere } from "cohere-ai";
 import { streamSSE } from "hono/streaming";
 
