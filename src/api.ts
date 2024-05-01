@@ -188,9 +188,9 @@ export async function handleChatCompletions(
 		let response = await bingAIClient.sendMessage('Write a short poem about cats', {
 			// (Optional) Set a conversation style for this message (default: 'balanced')
 			toneStyle: 'precise', // or creative, precise, fast
-			onProgress: (token) => {
-				process.stdout.write(token);
-			},
+			// onProgress: (token) => {
+			// 	process.stdout.write(token);
+			// },
 		})
 	  return streamSSE(c, async (stream) => {
 	  const sendChunk: OpenAI.ChatCompletionChunk = {
@@ -202,7 +202,7 @@ export async function handleChatCompletions(
 		  choices: [
 			{
 			  index: 0,
-			  delta: { role: "assistant", content: 'My name is Emily, I am here to serve you.' },
+			  delta: { role: "assistant", content: JSON.stringify(response, null, 2) },
 			  logprobs: null,
 			  finish_reason: null,
 			},
