@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { cors } from "hono/cors";
 import { getErrorMessageJSON } from "./utils";
 import { handleChatCompletions } from "./api";
+import axios from 'axios';
 
 const app = new Hono();
 
