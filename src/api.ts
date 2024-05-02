@@ -273,4 +273,4 @@ export async function handleChatCompletions(
 	};
 	return c.json(returnCompletionBody);
   }
-}
+}}
