@@ -234,7 +234,7 @@ export async function handleChatCompletions(
 		const sendChunk: OpenAI.ChatCompletionChunk = {
 		  id: "chatcmpl-123",
 		  object: "chat.completion.chunk",
-		  created: Date.now(), // Use the current timestamp
+		  created: 1694268190, // Use the current timestamp
 		  model: body.model,
 		  system_fingerprint: "fp_44709d6fcb",
 		  choices: [
@@ -256,7 +256,7 @@ export async function handleChatCompletions(
 	const returnCompletionBody: OpenAI.ChatCompletion = {
 	  id: "chatcmpl-123",
 	  object: "chat.completion",
-	  created: Date.now(), // Use the current timestamp
+	  created: 1694268190, // Use the current timestamp
 	  model: body.model,
 	  system_fingerprint: "fp_44709d6fcb",
 	  choices: [
