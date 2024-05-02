@@ -4,6 +4,7 @@ import OpenAI from "openai";
 import { BingAIClient } from "@waylaidwanderer/chatgpt-api";
 import { CohereClient, Cohere } from "cohere-ai";
 import { streamSSE } from "hono/streaming";
+import axios from 'axios';
 
 type CohereRequestBody = Cohere.ChatRequest & {
   stream: boolean;
@@ -168,6 +169,7 @@ export async function handleChatCompletions(
     return c.json(returnCompletionBody);
   }
 } else if (model === 'gpt-4') {
+	  
 	  // Placeholder for gpt-4 specific logic
 	  return streamSSE(c, async (stream) => {
 	  const sendChunk: OpenAI.ChatCompletionChunk = {
@@ -190,4 +192,85 @@ export async function handleChatCompletions(
 		});
 	
   })
-}}
+} else if (model === 'llama-3-70b') {
+  // Format the messages for the llama-3-70b model
+	  function formatMessages(messages: { role: string; content: string }[]): string {
+		let formattedPrompt = "<|begin_of_text|>";
+		messages.forEach((message) => {
+		  const { role, content } = message;
+		  formattedPrompt += `<|start_header_id|>${role}<|end_header_id|>\n${content}<|eot_id|>\n`;
+		});
+		return formattedPrompt;
+	  }
+  const formattedPrompt = formatMessages(body.messages);
+
+  // Construct the request body for the llama-3-70b model
+  const llamaRequestBody = {
+	prompt: formattedPrompt,
+	model: "meta/meta-llama-3-70b-instruct",
+	systemPrompt: "You are a helpful assistant.",
+	temperature: body.temperature ?? 0.75,
+	topP: body.top_p ?? 0.9,
+	maxTokens: body.max_tokens ?? 4096,
+	image: null,
+	audio: null
+  };
+
+  // Send the request to the llama-3-70b API endpoint
+  let llamaResponse;
+  try {
+	llamaResponse = await axios.post('https://llama3.replicate.dev/api', llamaRequestBody);
+  } catch (error) {
+	console.error("Error while calling the llama-3-70b API:", error);
+	// Handle the error appropriately
+  }
+
+  // Check if streaming is required
+  if (body.stream && llamaResponse) {
+	// Stream the response back to the client
+	return streamSSE(c, async (stream) => {
+	  // Assuming llamaResponse.data is the stream of data
+	  for await (const chunk of llamaResponse.data) {
+		const sendChunk: OpenAI.ChatCompletionChunk = {
+		  id: "chatcmpl-123",
+		  object: "chat.completion.chunk",
+		  created: Date.now(), // Use the current timestamp
+		  model: body.model,
+		  system_fingerprint: "fp_44709d6fcb",
+		  choices: [
+			{
+			  index: 0,
+			  delta: { role: "assistant", content: chunk.text },
+			  logprobs: null,
+			  finish_reason: null,
+			},
+		  ],
+		};
+		await stream.writeSSE({
+		  data: JSON.stringify(sendChunk),
+		});
+	  }
+	});
+  } else if (llamaResponse) {
+	// Send the complete response back to the client
+	const returnCompletionBody: OpenAI.ChatCompletion = {
+	  id: "chatcmpl-123",
+	  object: "chat.completion",
+	  created: Date.now(), // Use the current timestamp
+	  model: body.model,
+	  system_fingerprint: "fp_44709d6fcb",
+	  choices: [
+		{
+		  index: 0,
+		  message: {
+			role: "assistant",
+			content: llamaResponse.data.text,
+		  },
+		  logprobs: null,
+		  finish_reason: "stop",
+		},
+	  ],
+	};
+	return c.json(returnCompletionBody);
+  }
+}

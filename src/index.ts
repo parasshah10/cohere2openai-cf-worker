@@ -27,7 +27,8 @@ app.get("/v1/models", async (c) => {
     "command-light-nightly",
     "command-r",
     "command-r-plus",
-	"gpt-4"
+	"gpt-4",
+	"llama-3-70b",
   ];
 
   for (const modelString of availableModelStrings) {
