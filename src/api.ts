@@ -4,7 +4,6 @@ import OpenAI from "openai";
 import { BingAIClient } from "@waylaidwanderer/chatgpt-api";
 import { CohereClient, Cohere } from "cohere-ai";
 import { streamSSE } from "hono/streaming";
-import axios from 'axios';
 
 type CohereRequestBody = Cohere.ChatRequest & {
   stream: boolean;
@@ -217,13 +216,22 @@ export async function handleChatCompletions(
   };
 
   // Send the request to the llama-3-70b API endpoint
-  let llamaResponse;
-  try {
-	llamaResponse = await axios.post('https://llama3.replicate.dev/api', llamaRequestBody);
-  } catch (error) {
-	console.error("Error while calling the llama-3-70b API:", error);
-	// Handle the error appropriately
-  }
+	  let llamaResponse;
+	  try {
+		llamaResponse = await fetch('https://llama3.replicate.dev/api', {
+		  method: 'POST',
+		  body: JSON.stringify(llamaRequestBody),
+		  headers: { 'Content-Type': 'application/json' }
+		});
+		if (!llamaResponse.ok) {
+		  throw new Error(`HTTP error! status: ${llamaResponse.status}`);
+		}
+		llamaResponse = await llamaResponse.json();
+	  } catch (error) {
+		console.error("Error while calling the llama-3-70b API:", error);
+		// Handle the error appropriately
+	  }
+
 
   // Check if streaming is required
   if (body.stream && llamaResponse) {
